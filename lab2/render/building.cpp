@@ -51,7 +51,7 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, int vFactor, int 
 	// Get a handle for our "MVP" uniform
 	mvpMatrixID = glGetUniformLocation(programID, "MVP");
 
-       // TODO: Load a texture
+	// TODO: Load a texture
 	std::stringstream texturePath;
 	texturePath << "../lab2/assets/textures/facade" << textureNum << ".jpg";
 	textureID = LoadTextureTileBox(texturePath.str().c_str());

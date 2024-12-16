@@ -34,6 +34,8 @@ add_executable(lab2_building
 		lab2/render/renderable_object.h
 		lab2/render/skybox.cpp
 		lab2/render/skybox.h
+		lab2/render/terrain.cpp
+		lab2/render/terrain.h
 )
 
 add_executable(lab2_skybox

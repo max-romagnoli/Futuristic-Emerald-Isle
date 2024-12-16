@@ -81,6 +81,7 @@ int main(void)
 	Scene cityScene;
 	cityScene.initializeCity(6, 6, 10.0f, 20.0f);
 	cityScene.initializeAxis();
+	cityScene.initializeTerrain(2000, 2000, 30.0f);
 
 	// Skybox
 	glm::vec3 skyboxPosition(0.0f, 0.0f, 0.0f);

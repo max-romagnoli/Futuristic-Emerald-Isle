@@ -16,18 +16,15 @@ void Scene::initializeCity(int cityRows, int cityCols, float buildingWidth, floa
 
     for (int i = -(cityRows / 2); i < (cityRows / 2); ++i) {
         for (int j = -(cityCols / 2); j < (cityCols / 2); ++j) {
-            // Generate height factor
+
             int vFactor = dist(gen) + 1;
             float newHeight = buildingWidth * vFactor;
 
-            // Generate width factor
             float wFactor = 1 + (rand() % 3) / 10.0f;
             float newWidth = buildingWidth * wFactor;
 
-            // Pick texture
             int textureNum = rand() % 5;
 
-            // Create and initialize a building
             Building b;
             glm::vec3 position(j * spacingX, newHeight, i * spacingZ);
             b.initialize(
@@ -49,9 +46,14 @@ void Scene::initializeSkybox(glm::vec3 position, glm::vec3 scale) {
     skybox.initialize(position, scale);
 }
 
+void Scene::initializeTerrain(int width, int depth, float maxHeight) {
+    terrain.initialize(width, depth, maxHeight);
+}
+
 void Scene::render(const glm::mat4& vp) {
     skybox.render(vp);
     axis.render(vp);
+    terrain.render(vp);
 
     for (Building& b : buildings) {
         b.render(vp);
@@ -61,6 +63,7 @@ void Scene::render(const glm::mat4& vp) {
 void Scene::cleanup() {
     skybox.cleanup();
     axis.cleanup();
+    terrain.cleanup();
     for (Building& b : buildings) {
         b.cleanup();
     }
