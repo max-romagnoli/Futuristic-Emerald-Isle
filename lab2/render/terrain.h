@@ -16,4 +16,7 @@ public:
     void initialize(int width, int depth, float maxHeight);
     void render(const glm::mat4& vp);
     void cleanup();
+
+    glm::vec3 getCenterHill();
+    std::vector<glm::vec3> getHighestPoints(int n);
 };

@@ -71,17 +71,11 @@ int main(void)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
-	// TODO: Create more buildings
-    // ---------------------------
-	int cityRows = 6;
-	int cityCols = 6;
-	int buidingsNum = cityRows * cityCols;
-
 	// Scene setup
 	Scene cityScene;
-	cityScene.initializeCity(6, 6, 10.0f, 20.0f);
 	cityScene.initializeAxis();
 	cityScene.initializeTerrain(2000, 2000, 30.0f);
+	cityScene.initializeCitiesOnHills(20);
 
 	// Skybox
 	glm::vec3 skyboxPosition(0.0f, 0.0f, 0.0f);

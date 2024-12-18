@@ -21,8 +21,15 @@ public:
     void initializeAxis();
     void initializeSkybox(glm::vec3 position, glm::vec3 scale);
     void initializeTerrain(int width, int depth, float maxHeight);
+    void initializeCityOnHill(const glm::vec3& hillPosition, int cityRows, int cityCols, float buildingWidth, float buildingSpacing);
+    void initializeCitiesOnHills(int nCities);
+
     void render(const glm::mat4& vp);
     void cleanup();
+
+    /*** LEGACY METHODS ***/
+    void initializeBuildingsOnTerrain(Terrain &terrain);
+    void placeBuildingsOnHills(Terrain &terrain, int numHills, int buildingsPerHill);
 };
 
 #endif
