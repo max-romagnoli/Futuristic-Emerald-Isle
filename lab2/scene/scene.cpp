@@ -15,7 +15,7 @@ void Scene::initializeSkybox(glm::vec3 position, glm::vec3 scale) {
 }
 
 void Scene::initializeTerrain(int width, int depth, float maxHeight) {
-    terrain.initialize(width, depth, maxHeight);
+    terrain.initialize(width, depth, maxHeight, 100.0f);
 }
 
 void Scene::initializeCityOnHill(const glm::vec3& hillPosition, int cityRows, int cityCols, float buildingWidth, float buildingSpacing) {

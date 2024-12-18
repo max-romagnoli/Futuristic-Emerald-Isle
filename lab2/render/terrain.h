@@ -13,7 +13,7 @@ public:
     std::vector<GLuint> indices;
     std::vector<glm::vec2> uvs;
 
-    void initialize(int width, int depth, float maxHeight);
+    void initialize(int width, int depth, float maxHeight, float repeatFactor);
     void render(const glm::mat4& vp);
     void cleanup();
 

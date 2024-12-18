@@ -11,7 +11,7 @@
 #include "Skybox.h"
 #include "Skybox.h"
 
-void Terrain::initialize(int width, int depth, float maxHeight) {
+void Terrain::initialize(int width, int depth, float maxHeight, float repeatFactor) {
     float halfWidth = width / 2.0f;
     float halfDepth = depth / 2.0f;
 
@@ -23,7 +23,8 @@ void Terrain::initialize(int width, int depth, float maxHeight) {
             float height = sin(worldX * 0.03f) * cos(worldZ * 0.03f) * maxHeight;
 
             vertices.emplace_back(glm::vec3(worldX, height, worldZ));
-            uvs.emplace_back(glm::vec2(x / (float)width, z / (float)depth));
+
+            uvs.emplace_back(glm::vec2(x / (float)width, z / (float)depth) * repeatFactor);
         }
     }
 
@@ -59,7 +60,7 @@ void Terrain::initialize(int width, int depth, float maxHeight) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
-    textureID = LoadTextureTileBox("../lab2/assets/textures/test_terrain.jpg");
+    textureID = LoadTextureTileBox("../lab2/assets/textures/mud_leaves.jpg");
 
     programID = LoadShadersFromFile("../lab2/shaders/terrain.vert", "../lab2/shaders/terrain.frag");
 }
