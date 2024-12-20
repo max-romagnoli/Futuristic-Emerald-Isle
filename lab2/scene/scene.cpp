@@ -68,23 +68,19 @@ void Scene::initializeCitiesOnHills(int nCities) {
     }
 }
 
-void Scene::initializeTree(const Terrain& terrain) {
-    std::string jacaranda = "../lab2/assets/imported_models/jacaranda/jacaranda.gltf";
-    std::string searsia = "../lab2/assets/imported_models/searsia/searsia.gltf";
-
-    if (!tree.initialize(searsia)) {
-        std::cerr << "Failed to initialize tree!" << std::endl;
+void Scene::initializeForest(const Terrain& terrain) {
+    if (!forest.initialize("../lab2/assets/imported_models/jacaranda/jacaranda.gltf")) {
+        std::cerr << "Failed to initialize forest!" << std::endl;
     }
 
-    tree.setPosition(glm::vec3(0, 0, 0));
+    forest.generateTrees(terrain, 2000, 20.0f);
 }
-
 
 void Scene::render(const glm::mat4& vp) {
     skybox.render(vp);
     axis.render(vp);
     terrain.render(vp);
-    tree.render(vp);
+    forest.render(vp);
 
     for (Building& b : buildings) {
         b.render(vp);
@@ -95,7 +91,7 @@ void Scene::cleanup() {
     skybox.cleanup();
     axis.cleanup();
     terrain.cleanup();
-    tree.cleanup();
+    forest.cleanup();
     for (Building& b : buildings) {
         b.cleanup();
     }

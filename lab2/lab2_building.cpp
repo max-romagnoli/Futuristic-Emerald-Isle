@@ -78,8 +78,8 @@ int main(void)
 	Scene cityScene;
 	cityScene.initializeAxis();
 	cityScene.initializeTerrain(2000, 2000, 30.0f);
-	cityScene.initializeCitiesOnHills(20);
-	cityScene.initializeTree(cityScene.terrain);
+	cityScene.initializeCitiesOnHills(30);
+	cityScene.initializeForest(cityScene.terrain);
 
 	// Skybox
 	glm::vec3 skyboxPosition(0.0f, 0.0f, 0.0f);

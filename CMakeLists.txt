@@ -43,6 +43,8 @@ add_executable(lab2_building
         lab2/misc/generated_tree.h
 		lab2/render/tree.cpp
 		lab2/render/tree.h
+		lab2/render/forest.cpp
+		lab2/render/forest.h
 )
 
 add_executable(lab2_skybox

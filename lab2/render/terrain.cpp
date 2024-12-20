@@ -12,6 +12,10 @@
 #include "Skybox.h"
 
 void Terrain::initialize(int width, int depth, float maxHeight, float repeatFactor) {
+    this->width = width;
+    this->depth = depth;
+    this->maxHeight = maxHeight;
+
     float halfWidth = width / 2.0f;
     float halfDepth = depth / 2.0f;
 
@@ -132,4 +136,45 @@ std::vector<glm::vec3> Terrain::getHighestPoints(int n) {
     }
 
     return sortedVertices;
+}
+
+
+int Terrain::getWidth() const {
+    return width;
+}
+
+int Terrain::getDepth() const {
+    return depth;
+}
+
+float Terrain::getHeightAt(float x, float z) const {
+    float halfWidth = width / 2.0f;
+    float halfDepth = depth / 2.0f;
+
+    // Map world coordinates to grid coordinates
+    float gridX = x + halfWidth;
+    float gridZ = z + halfDepth;
+
+    if (gridX < 0 || gridX >= width || gridZ < 0 || gridZ >= depth) {
+        std::cerr << "Out-of-bounds coordinates: (" << x << ", " << z << ")" << std::endl;
+        return 0.0f;
+    }
+
+    int x0 = static_cast<int>(std::floor(gridX));
+    int z0 = static_cast<int>(std::floor(gridZ));
+    int x1 = std::min(x0 + 1, width);
+    int z1 = std::min(z0 + 1, depth);
+
+    float h00 = vertices[z0 * (width + 1) + x0].y;
+    float h10 = vertices[z0 * (width + 1) + x1].y;
+    float h01 = vertices[z1 * (width + 1) + x0].y;
+    float h11 = vertices[z1 * (width + 1) + x1].y;
+
+    float tx = gridX - x0;
+    float tz = gridZ - z0;
+
+    float h0 = h00 * (1 - tx) + h10 * tx;
+    float h1 = h01 * (1 - tx) + h11 * tx;
+
+    return h0 * (1 - tz) + h1 * tz;
 }

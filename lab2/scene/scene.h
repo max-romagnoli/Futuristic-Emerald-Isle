@@ -8,6 +8,7 @@
 #include "render/skybox.h"
 #include "render/terrain.h"
 #include "render/tree.h"
+#include "render/forest.h"
 
 class Scene {
 
@@ -16,7 +17,8 @@ public:
     AxisXYZ axis;
     Skybox skybox;
     Terrain terrain;
-    Tree tree;
+    //Tree tree;
+    Forest forest;
 
     ~Scene();
 
@@ -26,6 +28,7 @@ public:
     void initializeTerrain(int width, int depth, float maxHeight);
     void initializeCityOnHill(const glm::vec3& hillPosition, int cityRows, int cityCols, float buildingWidth, float buildingSpacing);
     void initializeCitiesOnHills(int nCities);
+    void initializeForest(const Terrain &terrain);
     void initializeTree(const Terrain &terrain);
 
     void render(const glm::mat4& vp);

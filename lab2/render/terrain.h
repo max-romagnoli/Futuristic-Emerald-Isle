@@ -19,4 +19,12 @@ public:
 
     glm::vec3 getCenterHill();
     std::vector<glm::vec3> getHighestPoints(int n);
+    int getWidth() const;
+    int getDepth() const;
+    float getHeightAt(float x, float z) const;
+
+private:
+    int width;
+    int depth;
+    float maxHeight;
 };
