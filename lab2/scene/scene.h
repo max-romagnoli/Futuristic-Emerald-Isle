@@ -7,6 +7,7 @@
 #include "render/axys_xyz.h"
 #include "render/skybox.h"
 #include "render/terrain.h"
+#include "render/tree.h"
 
 class Scene {
 
@@ -15,6 +16,8 @@ public:
     AxisXYZ axis;
     Skybox skybox;
     Terrain terrain;
+    Tree tree;
+
     ~Scene();
 
     void initializeCity(int cityRows, int cityCols, float buildingWidth, float buildingSpacing);
@@ -23,6 +26,7 @@ public:
     void initializeTerrain(int width, int depth, float maxHeight);
     void initializeCityOnHill(const glm::vec3& hillPosition, int cityRows, int cityCols, float buildingWidth, float buildingSpacing);
     void initializeCitiesOnHills(int nCities);
+    void initializeTree(const Terrain &terrain);
 
     void render(const glm::mat4& vp);
     void cleanup();

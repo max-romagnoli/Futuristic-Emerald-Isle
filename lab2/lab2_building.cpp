@@ -1,3 +1,9 @@
+#define TINYGLTF_IMPLEMENTATION
+//#define TINYGLTF_NO_STB_IMAGE 1
+//#define TINYGLTF_NO_STB_IMAGE_WRITE 1
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -5,8 +11,6 @@
 
 #include <render/shader.h>
 
-//#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
 #include <sstream>
 #include <vector>
 #include <iostream>
@@ -20,7 +24,6 @@
 #include <utils/camera.h>
 #include <scene/scene.h>
 
-static GLFWwindow *window;
 static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
 static void mouse_callback(GLFWwindow *window, int button, int action, int mods);
 static void cursor_position_callback(GLFWwindow *window, double xpos, double ypos);
@@ -76,6 +79,7 @@ int main(void)
 	cityScene.initializeAxis();
 	cityScene.initializeTerrain(2000, 2000, 30.0f);
 	cityScene.initializeCitiesOnHills(20);
+	cityScene.initializeTree(cityScene.terrain);
 
 	// Skybox
 	glm::vec3 skyboxPosition(0.0f, 0.0f, 0.0f);

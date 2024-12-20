@@ -1,7 +1,5 @@
 #include "load_textures.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
+#include <tinygltf-2.9.3/stb_image.h>
 #include <glad/gl.h>
 #include <iostream>
 

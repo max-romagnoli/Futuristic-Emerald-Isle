@@ -1,6 +1,5 @@
 #include "Skybox.h"
 #include "shader.h"
-#include <stb/stb_image.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <utils/load_textures.h>

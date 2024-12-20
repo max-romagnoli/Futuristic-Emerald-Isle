@@ -12,6 +12,7 @@ include_directories(
 	external/glfw-3.1.2/include/
 	external/glm-0.9.7.1/
 	external/glad-opengl-3.3/include/
+		external/tinygltf-2.9.3/
 	external/
 	lab2/
 )
@@ -36,6 +37,12 @@ add_executable(lab2_building
 		lab2/render/skybox.h
 		lab2/render/terrain.cpp
 		lab2/render/terrain.h
+        lab2/misc/loaded_tree.cpp
+        lab2/misc/loaded_tree.h
+        lab2/misc/generated_tree.cpp
+        lab2/misc/generated_tree.h
+		lab2/render/tree.cpp
+		lab2/render/tree.h
 )
 
 add_executable(lab2_skybox
