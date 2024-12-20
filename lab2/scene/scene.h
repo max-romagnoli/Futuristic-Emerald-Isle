@@ -31,7 +31,7 @@ public:
     void initializeForest(const Terrain &terrain);
     void initializeTree(const Terrain &terrain);
 
-    void render(const glm::mat4& vp);
+    void render(const glm::mat4& vp, const glm::vec3& cameraPosition);
     void cleanup();
 
     /*** LEGACY METHODS ***/

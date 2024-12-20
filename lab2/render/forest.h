@@ -13,7 +13,7 @@ public:
 
     bool initialize(const std::string& modelPath);
     void generateTrees(const Terrain& terrain, int count, float altitudeThreshold);
-    void render(const glm::mat4& vp);
+    void render(const glm::mat4& vp, const glm::vec3& cameraPosition, float renderRadius);
 
     void printCoords();
 

@@ -1,6 +1,15 @@
 #include "Forest.h"
 #include <random>
 #include <iostream>
+
+#include "Forest.h"
+#include "Forest.h"
+#include "Forest.h"
+#include "Forest.h"
+#include "Forest.h"
+#include "Forest.h"
+#include "Forest.h"
+#include "Forest.h"
 #include "terrain.h"
 #include "shader.h"
 
@@ -93,9 +102,13 @@ void Forest::generateTrees(const Terrain& terrain, int count, float altitudeThre
     }
 }
 
-void Forest::render(const glm::mat4& vp) {
+void Forest::render(const glm::mat4& vp, const glm::vec3& cameraPosition, float renderRadius) {
     for (auto& tree : trees) {
-        tree.render(vp);
+        float distanceToCamera = glm::distance(tree.position, cameraPosition);
+
+        if (distanceToCamera <= renderRadius) {
+            tree.render(vp);
+        }
     }
 }
 

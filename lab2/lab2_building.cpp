@@ -78,7 +78,7 @@ int main(void)
 	Scene cityScene;
 	cityScene.initializeAxis();
 	cityScene.initializeTerrain(2000, 2000, 30.0f);
-	cityScene.initializeCitiesOnHills(30);
+	cityScene.initializeCitiesOnHills(1);
 	cityScene.initializeForest(cityScene.terrain);
 
 	// Skybox
@@ -93,7 +93,9 @@ int main(void)
 		glm::mat4 projectionMatrix = activeCamera->getProjectionMatrix();
 		glm::mat4 vp = projectionMatrix * viewMatrix;
 
-		cityScene.render(vp);
+		glm::vec3 cameraPosition = activeCamera->getPosition();
+
+		cityScene.render(vp, cameraPosition);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

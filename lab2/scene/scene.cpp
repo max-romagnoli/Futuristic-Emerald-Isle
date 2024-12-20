@@ -2,6 +2,7 @@
 #include <scene/scene.h>
 #include <random>
 #include <set>
+#include <render/Forest.h>
 
 Scene::~Scene() {
     cleanup();
@@ -76,11 +77,11 @@ void Scene::initializeForest(const Terrain& terrain) {
     forest.generateTrees(terrain, 2000, 20.0f);
 }
 
-void Scene::render(const glm::mat4& vp) {
+void Scene::render(const glm::mat4& vp, const glm::vec3& cameraPosition) {
     skybox.render(vp);
     axis.render(vp);
     terrain.render(vp);
-    forest.render(vp);
+    forest.render(vp, cameraPosition, 300.0f);
 
     for (Building& b : buildings) {
         b.render(vp);

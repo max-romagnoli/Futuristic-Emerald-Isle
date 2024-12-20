@@ -85,6 +85,10 @@ public:
         fov = glm::clamp(newFoV, 1.0f, 120.0f); // Clamp FoV between reasonable limits
     }
 
+    [[nodiscard]] glm::vec3 getPosition() const {
+        return position;
+    }
+
 };
 
 #endif
