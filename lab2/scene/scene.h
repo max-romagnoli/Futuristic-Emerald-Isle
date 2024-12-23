@@ -4,6 +4,7 @@
 #include <vector>
 #include <render/building.h>
 #include "render/axys_xyz.h"
+#include "render/cars.h"
 #include "render/city.h"
 #include "render/skybox.h"
 #include "render/terrain.h"
@@ -23,6 +24,7 @@ public:
     Skybox skybox;
     Terrain terrain;
     Forest forest;
+    Cars cars;
 
     ~Scene();
 
@@ -35,8 +37,9 @@ public:
     void initializeCityOnHill(const glm::vec3& hillPosition, int cityRows, int cityCols, float buildingWidth, float buildingSpacing);
     void initializeCitiesOnHills(int nCities);
     void initializeForest(const Terrain &terrain, int nTrees);
+    void initializeCars(int nCars);
 
-    void render(const glm::mat4& vp, const glm::vec3& cameraPosition);
+    void render(const glm::mat4& vp, const glm::vec3& cameraPosition, double deltaTime);
     void cleanup();
 
     /*** LEGACY METHODS ***/

@@ -50,6 +50,10 @@ add_executable(lab2_building
 		lab2/utils/utils.h
 		lab2/render/city.cpp
 		lab2/render/city.h
+		lab2/render/cars.cpp
+		lab2/render/cars.h
+		lab2/render/car.cpp
+		lab2/render/car.h
 )
 
 add_executable(lab2_skybox

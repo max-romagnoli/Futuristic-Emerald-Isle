@@ -38,8 +38,8 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-#include <tiny_gltf.h>
 #include "glad/gl.h"
+#include "utils/utils.h"
 
 class Tree {
 public:
@@ -57,7 +57,6 @@ private:
 
     void updateModelMatrix();
 
-    // Shared resources
     static GLuint programID;
     static tinygltf::Model model;
     static std::vector<GLuint> bufferIDs;
@@ -66,4 +65,4 @@ private:
     friend class Forest;
 };
 
-#endif // TREE_H
+#endif

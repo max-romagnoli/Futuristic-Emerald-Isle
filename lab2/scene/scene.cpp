@@ -94,11 +94,21 @@ void Scene::initializeForest(const Terrain& terrain, int nTrees) {
     forest.generateTrees(terrain, nTrees, 20.0f);
 }
 
-void Scene::render(const glm::mat4& vp, const glm::vec3& cameraPosition) {
+void Scene::initializeCars(int nCars) {
+    if (!cars.initialize("../lab2/assets/imported_models/flying_car/scene.gltf")) {
+        std::cerr << "Failed to initialize forest!" << std::endl;
+    }
+
+    // TODO:
+    cars.generateCars();
+}
+
+void Scene::render(const glm::mat4& vp, const glm::vec3& cameraPosition, double deltaTime) {
     skybox.render(vp);
     axis.render(vp);
     terrain.render(vp, lightPosition, lightIntensity);
     forest.render(vp, cameraPosition, 300.0f, lightPosition, lightIntensity);
+    cars.render(vp, cameraPosition, 300.0f, lightPosition, lightIntensity, deltaTime);
 
     for (City& city : cities) {
         city.render(vp, lightPosition, lightIntensity);

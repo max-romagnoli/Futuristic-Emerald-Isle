@@ -71,9 +71,13 @@ int main(void)
 	// Scene setup
 	cityScene.setupLighting();
 	cityScene.initializeAxis();
-	cityScene.initializeTerrain(4000, 4000, 30.0f);
-	cityScene.initializeCitiesOnHills(50);
-	cityScene.initializeForest(cityScene.terrain, 4000);
+	cityScene.initializeTerrain(2000, 2000, 30.0f);
+	cityScene.initializeCitiesOnHills(20);
+	cityScene.initializeForest(cityScene.terrain, 2000);
+	cityScene.initializeCars(1);
+
+	// Animations
+	double lastTime = glfwGetTime();
 
 	// Skybox
 	glm::vec3 skyboxPosition(0.0f, 0.0f, 0.0f);
@@ -90,7 +94,11 @@ int main(void)
 		glm::vec3 cameraPosition = activeCamera->getPosition();
 		//cityScene.lightPosition = cameraPosition;
 
-		cityScene.render(vp, cameraPosition);
+		double currentTime = glfwGetTime();
+		double deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
+
+		cityScene.render(vp, cameraPosition, deltaTime);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
