@@ -19,6 +19,8 @@ void Terrain::initialize(int width, int depth, float maxHeight, float repeatFact
     float halfWidth = width / 2.0f;
     float halfDepth = depth / 2.0f;
 
+    normals.resize((width + 1) * (depth + 1), glm::vec3(0.0f));
+
     for (int z = 0; z <= depth; ++z) {
         for (int x = 0; x <= width; ++x) {
             float worldX = x - halfWidth;
@@ -45,6 +47,27 @@ void Terrain::initialize(int width, int depth, float maxHeight, float repeatFact
             indices.push_back(topRight);
             indices.push_back(bottomLeft);
             indices.push_back(bottomRight);
+
+            glm::vec3 v0 = vertices[topLeft];
+            glm::vec3 v1 = vertices[bottomLeft];
+            glm::vec3 v2 = vertices[topRight];
+            glm::vec3 normal1 = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+
+            glm::vec3 v3 = vertices[topRight];
+            glm::vec3 v4 = vertices[bottomLeft];
+            glm::vec3 v5 = vertices[bottomRight];
+            glm::vec3 normal2 = glm::normalize(glm::cross(v4 - v3, v5 - v3));
+
+            normals[topLeft] += normal1;
+            normals[bottomLeft] += normal1 + normal2;
+            normals[topRight] += normal1 + normal2;
+            normals[bottomRight] += normal2;
+        }
+    }
+
+    for (auto& normal : normals) {
+        if (glm::length(normal) > 0.0f) {
+            normal = glm::normalize(normal);
         }
     }
 
@@ -64,43 +87,73 @@ void Terrain::initialize(int width, int depth, float maxHeight, float repeatFact
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
-    textureID = LoadTextureTileBox("../lab2/assets/textures/mud_leaves.jpg");
+    glGenBuffers(1, &normalBufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
+    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), normals.data(), GL_STATIC_DRAW);
 
     programID = LoadShadersFromFile("../lab2/shaders/terrain.vert", "../lab2/shaders/terrain.frag");
+
+    // Uniform locations
+    mvpMatrixID = glGetUniformLocation(programID, "MVP");
+    modelMatrixID = glGetUniformLocation(programID, "modelMatrix");
+    lightPositionID = glGetUniformLocation(programID, "lightPosition");
+    lightIntensityID = glGetUniformLocation(programID, "lightIntensity");
+
+    // Texture
+    textureID = LoadTextureTileBox("../lab2/assets/textures/grass.jpg");
+    textureSamplerID = glGetUniformLocation(programID, "textureSampler");
 }
 
-void Terrain::render(const glm::mat4& vp) {
+void Terrain::render(const glm::mat4& vp, glm::vec3 lightPosition, glm::vec3 lightIntensity) {
     glUseProgram(programID);
 
-    glBindVertexArray(vertexArrayID);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    glUniform1i(glGetUniformLocation(programID, "textureSampler"), 0);
-
-    glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 mvp = vp * model;
-    glUniformMatrix4fv(glGetUniformLocation(programID, "MVP"), 1, GL_FALSE, &mvp[0][0]);
-
-    glEnableVertexAttribArray(0); // Positions
+    glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glEnableVertexAttribArray(1); // UVs
+    glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, textureID);
+    //glUniform1i(glGetUniformLocation(programID, "textureSampler"), 0);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
+
+    // Model matrix
+    glm::mat4 model = glm::mat4(1.0f);
+    glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &model[0][0]);
+
+    // MVP matrix
+    glm::mat4 mvp = vp * model;
+    glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
+
+    // Lighting
+    glUniform3fv(lightPositionID, 1, &lightPosition[0]);
+    glUniform3fv(lightIntensityID, 1, &lightIntensity[0]);
+
+    // Texture sampler
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glUniform1i(textureSamplerID, 0);
+
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
 }
 
 void Terrain::cleanup() {
     glDeleteBuffers(1, &vertexBufferID);
     glDeleteBuffers(1, &uvBufferID);
     glDeleteBuffers(1, &indexBufferID);
+    glDeleteBuffers(1, &normalBufferID);
     glDeleteVertexArrays(1, &vertexArrayID);
     glDeleteTextures(1, &textureID);
     glDeleteProgram(programID);

@@ -45,6 +45,11 @@ add_executable(lab2_building
 		lab2/render/tree.h
 		lab2/render/forest.cpp
 		lab2/render/forest.h
+		lab2/utils/light_cube.cpp
+		lab2/utils/utils.cpp
+		lab2/utils/utils.h
+		lab2/render/city.cpp
+		lab2/render/city.h
 )
 
 add_executable(lab2_skybox

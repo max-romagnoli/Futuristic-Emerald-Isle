@@ -8,6 +8,17 @@ Scene::~Scene() {
     cleanup();
 }
 
+void Scene::setupLighting() {
+    const glm::vec3 wave500(0.0f, 255.0f, 146.0f);
+    const glm::vec3 wave600(255.0f, 190.0f, 0.0f);
+    const glm::vec3 wave700(205.0f, 0.0f, 0.0f);
+    lightIntensity = 5.0f * (14.0f * wave500 + 10.0f * wave600 + 10.0f * wave700);
+    lightPosition = glm::vec3(720, 710, -1240);
+
+    //lightCube.initialize();
+    //lightCube.position = lightPosition;
+}
+
 void Scene::initializeAxis() {
     axis.initialize();
 }
@@ -21,6 +32,12 @@ void Scene::initializeTerrain(int width, int depth, float maxHeight) {
 }
 
 void Scene::initializeCityOnHill(const glm::vec3& hillPosition, int cityRows, int cityCols, float buildingWidth, float buildingSpacing) {
+    City city;
+    if (!city.initialize()) {
+        std::cerr << "Failed to initialize city!" << std::endl;
+        return;
+    }
+
     std::random_device rd;
     std::mt19937 gen(rd());
     std::vector<int> weights = {50, 50, 30, 20, 10, 5, 5};
@@ -50,14 +67,14 @@ void Scene::initializeCityOnHill(const glm::vec3& hillPosition, int cityRows, in
                 startZ + i * spacingZ
             );
 
-            Building b;
-            b.initialize(
+            city.addBuilding(
                 position,
-                glm::vec3(newWidth, newHeight, buildingWidth), // Size
+                glm::vec3(buildingWidth, newHeight, buildingWidth),
                 vFactor,
-                textureNum
+                city.facades.at(textureNum)
             );
-            buildings.push_back(b);
+
+            cities.push_back(city);
         }
     }
 }
@@ -69,33 +86,36 @@ void Scene::initializeCitiesOnHills(int nCities) {
     }
 }
 
-void Scene::initializeForest(const Terrain& terrain) {
+void Scene::initializeForest(const Terrain& terrain, int nTrees) {
     if (!forest.initialize("../lab2/assets/imported_models/jacaranda/jacaranda.gltf")) {
         std::cerr << "Failed to initialize forest!" << std::endl;
     }
 
-    forest.generateTrees(terrain, 2000, 20.0f);
+    forest.generateTrees(terrain, nTrees, 20.0f);
 }
 
 void Scene::render(const glm::mat4& vp, const glm::vec3& cameraPosition) {
     skybox.render(vp);
     axis.render(vp);
-    terrain.render(vp);
-    forest.render(vp, cameraPosition, 300.0f);
+    terrain.render(vp, lightPosition, lightIntensity);
+    forest.render(vp, cameraPosition, 300.0f, lightPosition, lightIntensity);
 
-    for (Building& b : buildings) {
-        b.render(vp);
+    for (City& city : cities) {
+        city.render(vp, lightPosition, lightIntensity);
     }
 }
 
 void Scene::cleanup() {
+    //lightCube.cleanup();
     skybox.cleanup();
     axis.cleanup();
     terrain.cleanup();
     forest.cleanup();
-    for (Building& b : buildings) {
-        b.cleanup();
+
+    for (City& city : cities) {
+        city.cleanup();
     }
+    cities.clear();
 }
 
 

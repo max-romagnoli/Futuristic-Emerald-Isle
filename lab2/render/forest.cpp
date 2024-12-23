@@ -1,17 +1,9 @@
 #include "Forest.h"
 #include <random>
 #include <iostream>
-
-#include "Forest.h"
-#include "Forest.h"
-#include "Forest.h"
-#include "Forest.h"
-#include "Forest.h"
-#include "Forest.h"
-#include "Forest.h"
-#include "Forest.h"
 #include "terrain.h"
 #include "shader.h"
+#include <utils/utils.h>
 
 Forest::Forest() {}
 
@@ -74,6 +66,20 @@ bool Forest::initialize(const std::string& modelPath) {
         Tree::textureIDs.push_back(textureID);
     }
 
+    for (const auto& material : Tree::model.materials) {
+        if (material.normalTexture.index >= 0) {
+            const auto& textureInfo = material.normalTexture;
+            GLuint normalTextureID = Tree::textureIDs[textureInfo.index];
+
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, normalTextureID);
+
+            // Log for debugging
+            std::cout << "Normal Map Loaded for Material: " << material.name
+                      << " Texture ID: " << normalTextureID << std::endl;
+        }
+    }
+
     return true;
 }
 
@@ -102,11 +108,14 @@ void Forest::generateTrees(const Terrain& terrain, int count, float altitudeThre
     }
 }
 
-void Forest::render(const glm::mat4& vp, const glm::vec3& cameraPosition, float renderRadius) {
+void Forest::render(const glm::mat4& vp, const glm::vec3& cameraPosition, float renderRadius, glm::vec3 lightPosition, glm::vec3 lightIntensity) {
     for (auto& tree : trees) {
         float distanceToCamera = glm::distance(tree.position, cameraPosition);
 
         if (distanceToCamera <= renderRadius) {
+            glUseProgram(Tree::programID);
+            glUniform3fv(glGetUniformLocation(Tree::programID, "lightPosition"), 1, &lightPosition[0]);
+            glUniform3fv(glGetUniformLocation(Tree::programID, "lightIntensity"), 1, &lightIntensity[0]);
             tree.render(vp);
         }
     }

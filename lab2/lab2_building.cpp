@@ -1,25 +1,14 @@
 #define TINYGLTF_IMPLEMENTATION
-//#define TINYGLTF_NO_STB_IMAGE 1
-//#define TINYGLTF_NO_STB_IMAGE_WRITE 1
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
+#define _USE_MATH_DEFINES
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-#include <render/shader.h>
-
 #include <sstream>
-#include <vector>
 #include <iostream>
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <random>
-
-#include <render/axys_xyz.h>
-#include <render/building.h>
 #include <utils/init_glfw_glad.h>
 #include <utils/camera.h>
 #include <scene/scene.h>
@@ -36,10 +25,15 @@ Camera mainCamera;
 Camera lightCamera;
 Camera* activeCamera = &mainCamera;
 
+Scene cityScene;
+
+int windowWidth = 1024;
+int windowHeight = 768;
+
 int main(void)
 {
 	// Initialise OpenGL
-	GLFWwindow* window = initializeOpenGL("Toward a Futuristic Emerald Isle", 1024, 768);
+	GLFWwindow* window = initializeOpenGL("Toward a Futuristic Emerald Isle", windowWidth, windowHeight);
 	if (!window) return -1;
 
 	// Keys
@@ -75,11 +69,11 @@ int main(void)
 	glEnable(GL_CULL_FACE);
 
 	// Scene setup
-	Scene cityScene;
+	cityScene.setupLighting();
 	cityScene.initializeAxis();
-	cityScene.initializeTerrain(2000, 2000, 30.0f);
-	cityScene.initializeCitiesOnHills(1);
-	cityScene.initializeForest(cityScene.terrain);
+	cityScene.initializeTerrain(4000, 4000, 30.0f);
+	cityScene.initializeCitiesOnHills(50);
+	cityScene.initializeForest(cityScene.terrain, 4000);
 
 	// Skybox
 	glm::vec3 skyboxPosition(0.0f, 0.0f, 0.0f);
@@ -94,6 +88,7 @@ int main(void)
 		glm::mat4 vp = projectionMatrix * viewMatrix;
 
 		glm::vec3 cameraPosition = activeCamera->getPosition();
+		//cityScene.lightPosition = cameraPosition;
 
 		cityScene.render(vp, cameraPosition);
 
@@ -125,29 +120,53 @@ void mouse_callback(GLFWwindow* window, int button, int action, int mods)
 
 /* TODO: could refactor and put some fields into the class*/
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
-	if (!isMousePressed) return;
+	if (xpos < 0 || xpos >= windowWidth || ypos < 0 || ypos > windowHeight)
+		return;
 
-	double deltaX = xpos - lastMouseX;
-	double deltaY = ypos - lastMouseY;
-	lastMouseX = xpos;
-	lastMouseY = ypos;
+	if (isMousePressed) {
+		double deltaX = xpos - lastMouseX;
+		double deltaY = ypos - lastMouseY;
+		lastMouseX = xpos;
+		lastMouseY = ypos;
 
-	glm::vec3 viewDirection = glm::normalize(activeCamera->lookAt - activeCamera->position);
+		glm::vec3 viewDirection = glm::normalize(activeCamera->lookAt - activeCamera->position);
 
-	glm::mat4 yaw = glm::rotate(glm::mat4(1.0f), glm::radians((float)deltaX * sensitivity), activeCamera->up);
-	viewDirection = glm::vec3(yaw * glm::vec4(viewDirection, 0.0f));
+		glm::mat4 yaw = glm::rotate(glm::mat4(1.0f), glm::radians((float)deltaX * sensitivity), activeCamera->up);
+		viewDirection = glm::vec3(yaw * glm::vec4(viewDirection, 0.0f));
 
-	glm::vec3 rightDirection = glm::normalize(glm::cross(viewDirection, activeCamera->up));
-	glm::mat4 pitch = glm::rotate(glm::mat4(1.0f), glm::radians((float)deltaY * sensitivity), rightDirection);
-	viewDirection = glm::vec3(pitch * glm::vec4(viewDirection, 0.0f));
+		glm::vec3 rightDirection = glm::normalize(glm::cross(viewDirection, activeCamera->up));
+		glm::mat4 pitch = glm::rotate(glm::mat4(1.0f), glm::radians((float)deltaY * sensitivity), rightDirection);
+		viewDirection = glm::vec3(pitch * glm::vec4(viewDirection, 0.0f));
 
-	activeCamera->setLookAt(activeCamera->position + viewDirection);
+		activeCamera->setLookAt(activeCamera->position + viewDirection);
+	}
+	else {
+		// float x = xpos / windowWidth;
+		// float y = ypos / windowHeight;
+		//
+		// // Normalize cursor position to [-1, 1] range
+		// x = x * 2.0f - 1.0f;
+		// y = 1.0f - y * 2.0f;
+		//
+		// const float scaleXY = 250.0f;  // Scale for X and Y
+		// const float scaleZ = 150.0f;  // Adjust this scale for Z as needed
+		//
+		// cityScene.lightPosition.x = x * scaleXY - 278.0f;
+		// cityScene.lightPosition.y = y * scaleXY + 278.0f;
+		//
+		// // Map Y cursor position to Z coordinate
+		// cityScene.lightPosition.z = y * scaleZ;
+		//
+		// cityScene.lightCube.position = cityScene.lightPosition;
+	}
 }
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
 {
 	if (action != GLFW_PRESS && action != GLFW_REPEAT)
 		return;
+
+	float lightMovementSpeed = 10.0f;
 
 	// Camera controls
 	if (key == GLFW_KEY_W) activeCamera->moveForward(10.0f);
@@ -160,6 +179,23 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 	// Adjust field of view
 	if (key == GLFW_KEY_UP) activeCamera->setFoV(activeCamera->fov - 1.0f);
 	if (key == GLFW_KEY_DOWN) activeCamera->setFoV(activeCamera->fov + 1.0f);
+
+	// Move the light
+	if (key == GLFW_KEY_I) cityScene.lightPosition.z -= lightMovementSpeed; // Forward
+	if (key == GLFW_KEY_K) cityScene.lightPosition.z += lightMovementSpeed; // Backward
+	if (key == GLFW_KEY_J) cityScene.lightPosition.x -= lightMovementSpeed; // Left
+	if (key == GLFW_KEY_L) cityScene.lightPosition.x += lightMovementSpeed; // Right
+	if (key == GLFW_KEY_U) cityScene.lightPosition.y += lightMovementSpeed; // Up
+	if (key == GLFW_KEY_O) cityScene.lightPosition.y -= lightMovementSpeed; // Down
+
+	// TODO: Print light position for debugging
+	if (key == GLFW_KEY_I || key == GLFW_KEY_K || key == GLFW_KEY_J ||
+		key == GLFW_KEY_L || key == GLFW_KEY_U || key == GLFW_KEY_O) {
+		std::cout << "Light Position: ("
+				  << cityScene.lightPosition.x << ", "
+				  << cityScene.lightPosition.y << ", "
+				  << cityScene.lightPosition.z << ")" << std::endl;
+		}
 
 	// Switch between cameras
 	if (key == GLFW_KEY_1) activeCamera = &mainCamera;

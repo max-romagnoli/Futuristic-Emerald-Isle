@@ -1,36 +1,41 @@
 #ifndef BUILDING_H
 #define BUILDING_H
 
-#include <glad/gl.h>
+#include <string>
 #include <glm/glm.hpp>
-#include <sstream>
-#include <vector>
+#include <glad/gl.h>
 
-struct Building {
-    glm::vec3 position;
-    glm::vec3 scale;
-    int vFactor;
-    int textureNum;
+class Building {
+public:
+	Building();
+	~Building();
 
-    GLuint vertexArrayID;
-    GLuint vertexBufferID;
-    GLuint indexBufferID;
-    GLuint colorBufferID;
-    GLuint uvBufferID;
-    GLuint textureID;
+	void initialize(const glm::vec3& position, const glm::vec3& scale, int vFactor, GLuint facadeID);
+	void render(const glm::mat4& vp, GLuint programID, GLuint textureID, GLuint mvpMatrixID, GLuint modelMatrixID,
+		GLuint lightPositionID, GLuint lightIntensityID, glm::vec3 lightPosition, glm::vec3 lightIntensity);
+	void cleanup();
 
-    GLuint mvpMatrixID;
-    GLuint textureSamplerID;
-    GLuint programID;
+private:
+	glm::vec3 position;
+	glm::vec3 scale;
+	int vFactor;
+	GLuint facadeID;
 
-    void initialize(glm::vec3 position, glm::vec3 scale, int vFactor, int textureNum);
-    void render(glm::mat4 cameraMatrix);
-    void cleanup();
+	GLuint vertexArrayID;
+	GLuint vertexBufferID;
+	GLuint colorBufferID;
+	GLuint uvBufferID;
+	GLuint normalBufferID;
+	GLuint indexBufferID;
+
+	std::string populateNormals();
+	glm::vec3 calcNormal(const GLfloat* faceVertices);
+	void addFaceNormal(GLfloat* normalBuffer, int offset, const GLfloat* vertexBuffer, int vertexOffset);
 
 
 	/**** BUFFER DATA ****/
 
-    GLfloat vertex_buffer_data[72] = {	// Vertex definition for a canonical box
+	GLfloat vertex_buffer_data[72] = {	// Vertex definition for a canonical box
 		// Front face
 		-1.0f, -1.0f, 1.0f,
 		1.0f, -1.0f, 1.0f,
@@ -163,6 +168,8 @@ struct Building {
 		0.0f, 0.0f,
 		0.0f, 0.0f,
 	};
+
+	GLfloat normal_buffer_data[120];
 };
 
 #endif
