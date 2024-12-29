@@ -9,7 +9,7 @@ City::City() : programID(0), textureID(0), mvpMatrixID(0), modelMatrixID(0), lig
 City::~City() {}
 
 bool City::initialize() {
-    programID = LoadShadersFromFile("../lab2/shaders/box.vert", "../lab2/shaders/box.frag");
+    programID = LoadShadersFromFile("../futuristic_emerald_isle/shaders/box.vert", "../futuristic_emerald_isle/shaders/box.frag");
     if (programID == 0) {
         std::cerr << "Failed to load shaders for city!" << std::endl;
         return false;
@@ -22,7 +22,7 @@ bool City::initialize() {
 
     for (const int i : {0, 1, 2, 3, 4, 5}) {
         std::stringstream texturePath;
-        texturePath << "../lab2/assets/textures/facade" << i << ".jpg";
+        texturePath << "../futuristic_emerald_isle/assets/textures/facade" << i << ".jpg";
         facades.push_back(LoadTextureTileBox(texturePath.str().c_str()));
     }
 

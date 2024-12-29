@@ -57,7 +57,7 @@ struct LightCube {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_buffer_data), index_buffer_data, GL_STATIC_DRAW);
 
-        programID = LoadShadersFromFile("../lab2/shaders/box.vert", "../lab2/shaders/box.frag");
+        programID = LoadShadersFromFile("../futuristic_emerald_isle/shaders/box.vert", "../futuristic_emerald_isle/shaders/box.frag");
         mvpMatrixID = glGetUniformLocation(programID, "MVP");
     }
 

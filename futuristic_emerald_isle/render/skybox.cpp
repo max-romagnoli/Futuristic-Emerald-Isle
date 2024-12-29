@@ -27,7 +27,7 @@ void Skybox::initialize(glm::vec3 position, glm::vec3 scale) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_buffer_data), index_buffer_data, GL_STATIC_DRAW);
 
-    programID = LoadShadersFromFile("../lab2/shaders/skybox.vert", "../lab2/shaders/skybox.frag");
+    programID = LoadShadersFromFile("../futuristic_emerald_isle/shaders/skybox.vert", "../futuristic_emerald_isle/shaders/skybox.frag");
     if (programID == 0)
     {
         std::cerr << "Failed to load shaders." << std::endl;
@@ -35,7 +35,7 @@ void Skybox::initialize(glm::vec3 position, glm::vec3 scale) {
 
     mvpMatrixID = glGetUniformLocation(programID, "MVP");
 
-    textureID = LoadTextureTileBox("../lab2/assets/skyboxes/sky.png");
+    textureID = LoadTextureTileBox("../futuristic_emerald_isle/assets/skyboxes/sky.png");
 
     textureSamplerID  = glGetUniformLocation(programID,"textureSampler");
 }

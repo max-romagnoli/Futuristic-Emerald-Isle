@@ -91,7 +91,7 @@ void Terrain::initialize(int width, int depth, float maxHeight, float repeatFact
     glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), normals.data(), GL_STATIC_DRAW);
 
-    programID = LoadShadersFromFile("../lab2/shaders/terrain.vert", "../lab2/shaders/terrain.frag");
+    programID = LoadShadersFromFile("../futuristic_emerald_isle/shaders/terrain.vert", "../futuristic_emerald_isle/shaders/terrain.frag");
 
     // Uniform locations
     mvpMatrixID = glGetUniformLocation(programID, "MVP");
@@ -100,7 +100,7 @@ void Terrain::initialize(int width, int depth, float maxHeight, float repeatFact
     lightIntensityID = glGetUniformLocation(programID, "lightIntensity");
 
     // Texture
-    textureID = LoadTextureTileBox("../lab2/assets/textures/grass.jpg");
+    textureID = LoadTextureTileBox("../futuristic_emerald_isle/assets/textures/grass.jpg");
     textureSamplerID = glGetUniformLocation(programID, "textureSampler");
 }
 

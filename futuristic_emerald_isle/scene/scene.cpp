@@ -128,7 +128,7 @@ void Scene::initializeForest(const Terrain& terrain, int nTrees) {
 }
 
 void Scene::initializeCars(int nCars) {
-    if (!cars.initialize("../lab2/assets/imported_models/flying_car/scene.gltf")) {
+    if (!cars.initialize("../futuristic_emerald_isle/assets/imported_models/flying_car/scene.gltf")) {
         std::cerr << "Failed to initialize cars!" << std::endl;
         return;
     }
@@ -144,7 +144,7 @@ void Scene::initializeCars(int nCars) {
 }
 
 void Scene::initializeBirds(int nBirds) {
-    if (!birds.initialize("../lab2/assets/imported_models/lowpoly_seagull/scene.gltf")) {
+    if (!birds.initialize("../futuristic_emerald_isle/assets/imported_models/lowpoly_seagull/scene.gltf")) {
         std::cerr << "Failed to initialize birds!" << std::endl;
         return;
     }

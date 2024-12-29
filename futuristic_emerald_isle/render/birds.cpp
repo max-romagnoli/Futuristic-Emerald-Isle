@@ -9,7 +9,7 @@ Birds::Birds() {}
 Birds::~Birds() {}
 
 bool Birds::initialize(const std::string& modelPath) {
-    Bird::programID = LoadShadersFromFile("../lab2/shaders/bird.vert", "../lab2/shaders/bird.frag");
+    Bird::programID = LoadShadersFromFile("../futuristic_emerald_isle/shaders/bird.vert", "../futuristic_emerald_isle/shaders/bird.frag");
     if (Bird::programID == 0) {
         std::cerr << "Failed to load bird shaders!" << std::endl;
         return false;

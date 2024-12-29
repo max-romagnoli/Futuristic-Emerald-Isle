@@ -6,7 +6,7 @@
 
 void AxisXYZ::initialize() {
     // Load shaders for the axis
-    programID = LoadShadersFromFile("../lab2/shaders/axis.vert", "../lab2/shaders/axis.frag");
+    programID = LoadShadersFromFile("../futuristic_emerald_isle/shaders/axis.vert", "../futuristic_emerald_isle/shaders/axis.frag");
     if (programID == 0) {
         std::cerr << "Failed to load axis shaders." << std::endl;
     }

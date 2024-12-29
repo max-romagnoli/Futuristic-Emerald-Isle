@@ -13,7 +13,6 @@
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
   <component name="CidrRootsConfiguration">
     <excludeRoots>
-      <file path="$PROJECT_DIR$/futuristic_emerald_isle/assets/imported_models" />
       <file path="$PROJECT_DIR$/lab2/assets/imported_models/searsia" />
     </excludeRoots>
   </component>

@@ -10,7 +10,7 @@ Cars::Cars() {}
 Cars::~Cars() {}
 
 bool Cars::initialize(const std::string& modelPath) {
-    Car::programID = LoadShadersFromFile("../lab2/shaders/car.vert", "../lab2/shaders/car.frag");
+    Car::programID = LoadShadersFromFile("../futuristic_emerald_isle/shaders/car.vert", "../futuristic_emerald_isle/shaders/car.frag");
     if (Car::programID == 0) {
         std::cerr << "Failed to load car shaders!" << std::endl;
         return false;
