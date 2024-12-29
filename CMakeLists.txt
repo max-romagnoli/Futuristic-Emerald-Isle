@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(lab2)
+project(futuristic_emerald_isle)
 
 find_package(OpenGL REQUIRED)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
@@ -14,62 +14,52 @@ include_directories(
 	external/glad-opengl-3.3/include/
 		external/tinygltf-2.9.3/
 	external/
-	lab2/
+		futuristic_emerald_isle/
 )
 
-add_executable(lab2_building
-	lab2/lab2_building.cpp
-	lab2/render/shader.cpp
-		lab2/utils/load_textures.cpp
-		lab2/render/axys_xyz.cpp
-		lab2/render/axys_xyz.h
-		lab2/render/building.cpp
-		lab2/render/building.h
-		lab2/utils/init_glfw_glad.cpp
-		lab2/utils/init_glfw_glad.h
-		lab2/utils/camera.cpp
-		lab2/utils/camera.h
-		lab2/scene/scene.cpp
-		lab2/scene/scene.h
-		lab2/render/renderable_object.cpp
-		lab2/render/renderable_object.h
-		lab2/render/skybox.cpp
-		lab2/render/skybox.h
-		lab2/render/terrain.cpp
-		lab2/render/terrain.h
-        lab2/misc/loaded_tree.cpp
-        lab2/misc/loaded_tree.h
-        lab2/misc/generated_tree.cpp
-        lab2/misc/generated_tree.h
-		lab2/render/tree.cpp
-		lab2/render/tree.h
-		lab2/render/forest.cpp
-		lab2/render/forest.h
-		lab2/utils/light_cube.cpp
-		lab2/utils/utils.cpp
-		lab2/utils/utils.h
-		lab2/render/city.cpp
-		lab2/render/city.h
-		lab2/render/cars.cpp
-		lab2/render/cars.h
-		lab2/render/car.cpp
-		lab2/render/car.h
+add_executable(futuristic_emerald_isle
+		futuristic_emerald_isle/main.cpp
+		futuristic_emerald_isle/render/shader.cpp
+		futuristic_emerald_isle/utils/load_textures.cpp
+		futuristic_emerald_isle/render/axys_xyz.cpp
+		futuristic_emerald_isle/render/axys_xyz.h
+		futuristic_emerald_isle/render/building.cpp
+		futuristic_emerald_isle/render/building.h
+		futuristic_emerald_isle/utils/init_glfw_glad.cpp
+		futuristic_emerald_isle/utils/init_glfw_glad.h
+		futuristic_emerald_isle/utils/camera.cpp
+		futuristic_emerald_isle/utils/camera.h
+		futuristic_emerald_isle/scene/scene.cpp
+		futuristic_emerald_isle/scene/scene.h
+		futuristic_emerald_isle/render/skybox.cpp
+		futuristic_emerald_isle/render/skybox.h
+		futuristic_emerald_isle/render/terrain.cpp
+		futuristic_emerald_isle/render/terrain.h
+		futuristic_emerald_isle/misc/loaded_tree.cpp
+		futuristic_emerald_isle/misc/loaded_tree.h
+		futuristic_emerald_isle/misc/generated_tree.cpp
+		futuristic_emerald_isle/misc/generated_tree.h
+		futuristic_emerald_isle/render/tree.cpp
+		futuristic_emerald_isle/render/tree.h
+		futuristic_emerald_isle/render/forest.cpp
+		futuristic_emerald_isle/render/forest.h
+		futuristic_emerald_isle/utils/light_cube.cpp
+		futuristic_emerald_isle/utils/utils.cpp
+		futuristic_emerald_isle/utils/utils.h
+		futuristic_emerald_isle/render/city.cpp
+		futuristic_emerald_isle/render/city.h
+		futuristic_emerald_isle/render/cars.cpp
+		futuristic_emerald_isle/render/cars.h
+		futuristic_emerald_isle/render/car.cpp
+		futuristic_emerald_isle/render/car.h
+		futuristic_emerald_isle/render/bird.cpp
+		futuristic_emerald_isle/render/bird.h
+		futuristic_emerald_isle/render/birds.cpp
+		futuristic_emerald_isle/render/birds.h
 )
 
-add_executable(lab2_skybox
-		lab2/lab2_skybox.cpp
-	lab2/render/shader.cpp
-		lab2/lab2_skybox.cpp
-)
-
-target_link_libraries(lab2_building
+target_link_libraries(futuristic_emerald_isle
 	${OPENGL_LIBRARY}
 	glfw
 	glad
-)
-
-target_link_libraries(lab2_skybox
-		${OPENGL_LIBRARY}
-		glfw
-		glad
 )
