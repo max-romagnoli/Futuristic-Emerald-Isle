@@ -15,7 +15,7 @@ public:
     float nearPlane;      // Near clipping plane
     float farPlane;       // Far clipping plane
     float aspectRatio;    // Aspect ratio (width/height)
-    float speed = 0.1f;
+    float speed = 3.0f;
 
     glm::mat4 getViewMatrix() const {
         return glm::lookAt(position, lookAt, up);
